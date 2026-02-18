@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CountryCoordinates",
+  "description": "Country reference data with geographic coordinates",
+  "type": "object",
+  "properties": {
+    "alpha3_code": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$",
+      "description": "ISO 3166-1 alpha-3 country code"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country name"
+    },
+    "lat_avg": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90,
+      "description": "Average latitude coordinate"
+    },
+    "long_avg": {
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180,
+      "description": "Average longitude coordinate"
+    }
+  },
+  "required": ["alpha3_code"]
+}

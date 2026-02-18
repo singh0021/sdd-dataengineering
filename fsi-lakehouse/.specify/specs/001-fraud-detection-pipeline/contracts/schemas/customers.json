@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Customer",
+  "description": "Banking customer record",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique customer identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Customer full name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Customer email address"
+    }
+  },
+  "required": ["id"],
+  "additionalProperties": true
+}

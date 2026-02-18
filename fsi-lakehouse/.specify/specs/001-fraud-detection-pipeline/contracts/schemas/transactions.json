@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Transaction",
+  "description": "Banking transaction record for fraud detection",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique transaction identifier"
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Reference to customer record"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Transaction amount in base currency"
+    },
+    "countryOrig": {
+      "type": "string",
+      "description": "Origin country ISO alpha-3 code"
+    },
+    "countryDest": {
+      "type": "string",
+      "description": "Destination country ISO alpha-3 code"
+    },
+    "oldBalanceOrig": {
+      "type": "number",
+      "description": "Origin account balance before transaction"
+    },
+    "newBalanceOrig": {
+      "type": "number",
+      "description": "Origin account balance after transaction"
+    },
+    "oldBalanceDest": {
+      "type": "number",
+      "description": "Destination account balance before transaction"
+    },
+    "newBalanceDest": {
+      "type": "number",
+      "description": "Destination account balance after transaction"
+    }
+  },
+  "required": ["id"]
+}

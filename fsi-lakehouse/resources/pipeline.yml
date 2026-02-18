@@ -1,0 +1,65 @@
+resources:
+  pipelines:
+    fsi_fraud_detection_pipeline:
+      name: "fsi-fraud-detection-${bundle.target}"
+      catalog: ${var.catalog}
+      target: ${var.schema}
+
+      development: true
+      continuous: false
+      channel: PREVIEW
+      photon: true
+
+      configuration:
+        pipelines.enableTrackHistory: "true"
+        spark.databricks.delta.preview.enabled: "true"
+
+      clusters:
+        - label: default
+          autoscale:
+            min_workers: 1
+            max_workers: 4
+          spark_conf:
+            spark.databricks.cluster.profile: singleNode
+          custom_tags:
+            project: fsi-lakehouse
+            environment: ${bundle.target}
+
+      libraries:
+        - notebook:
+            path: ./src/01-bronze.py
+        - notebook:
+            path: ./src/02-silver.py
+        - notebook:
+            path: ./src/03-gold.py
+
+      permissions:
+        - group_name: data-engineers
+          level: CAN_MANAGE
+        - group_name: data-scientists
+          level: CAN_VIEW
+        - group_name: data-analysts
+          level: CAN_VIEW
+
+  jobs:
+    fsi_fraud_detection_refresh:
+      name: "fsi-fraud-detection-refresh-${bundle.target}"
+
+      tasks:
+        - task_key: refresh_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.fsi_fraud_detection_pipeline.id}
+            full_refresh: false
+
+      schedule:
+        quartz_cron_expression: "0 0 */4 * * ?"
+        timezone_id: UTC
+        pause_status: PAUSED
+
+      email_notifications:
+        on_failure:
+          - data-platform-alerts@company.com
+
+      tags:
+        project: fsi-lakehouse
+        environment: ${bundle.target}

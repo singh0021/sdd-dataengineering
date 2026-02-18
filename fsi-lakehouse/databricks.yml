@@ -1,0 +1,41 @@
+bundle:
+  name: fsi-lakehouse
+
+variables:
+  catalog:
+    description: Unity Catalog name
+    default: main__build
+  schema:
+    description: Schema name for pipeline tables
+    default: dbdemos_fsi_fraud_detection
+  volume_path:
+    description: Volume path for raw data
+    default: /Volumes/${var.catalog}/${var.schema}/fraud_raw_data
+
+workspace:
+  host: ${DATABRICKS_HOST}
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    mode: development
+    default: true
+    variables:
+      catalog: dev_fsi
+      schema: fraud_detection
+
+  staging:
+    mode: development
+    variables:
+      catalog: stg_fsi
+      schema: fraud_detection
+
+  prod:
+    mode: production
+    variables:
+      catalog: prd_fsi
+      schema: fraud_detection
+    run_as:
+      service_principal_name: ${PROD_SP_NAME}
